@@ -87,6 +87,7 @@ export const login = async(req, res) => {
 
 export const logout = async(req, res) => {
     try {
+        console.log("Logout cont reached");
         const refreshToken = req.cookies.refreshToken;
         if(refreshToken){
             const decodedPayload = jwt.verify(refreshToken , process.env.REFRESH_TOKEN_SECRET);  // this returrns an object
@@ -95,6 +96,7 @@ export const logout = async(req, res) => {
 
         res.clearCookie("accessToken");
         res.clearCookie("refreshToken");
+        console.log("Logout cont executed");
 
         res.status(200).json({message : "Logout is successful"});
     } catch (error) {
