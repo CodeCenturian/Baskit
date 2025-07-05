@@ -11,20 +11,22 @@ export const createCheckoutSesssion = async (req,res) => {
 
     let totalAmount = 0;
 
-    const lineItems = products.map(product => {
-        totalAmount = Math.round(product.price * product.quantity);
+    const lineItems = products.map((product) => {
+			const amount = Math.round(product.price * 100); // stripe wants u to send in the format of cents
+			totalAmount += amount * product.quantity;
 
-        return {
-            price_data : {
-                currency : "usd",
-                product_data : {
-                    name : product.name,
-                    images : [product.image],
-                }
-            },
-            unit_amount : amount
-        }
-    });
+			return {
+				price_data: {
+					currency: "usd",
+					product_data: {
+						name: product.name,
+						images: [product.image],
+					},
+					unit_amount: amount,
+				},
+				quantity: product.quantity || 1,
+			};
+		});
 
     let coupon = null;
     if(couponCode){
@@ -32,25 +34,31 @@ export const createCheckoutSesssion = async (req,res) => {
         if(coupon) totalAmount -= Math.round(totalAmount * coupon.discountPercentage) /100;
     }
 
-    const session = await stripe.checkout.session.create({
-        payment_method_types : ["card",],
-        line_items : lineItems,
-        mode : "payment",
-        success_url : `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url : `${process.env.CLIENT_URL}/purchase-cancel`,
-        discount : coupon ?
-        [ {coupon : await createStripeCoupon(coupon.discountPercentage)} ]
-        :  [],
-        metadata : {
-            userID : req.user._id,
-            couponCode : couponCode || "",
-            products : JSON.stringify(products.map(p => ({
-                id : p.id,
-                quantity : p.quantity,
-                price : p.price
-            })))
-        }
-    });
+    const session = await stripe.checkout.sessions.create({
+			payment_method_types: ["card"],
+			line_items: lineItems,
+			mode: "payment",
+			success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
+			cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
+			discounts: coupon
+				? [
+						{
+							coupon: await createStripeCoupon(coupon.discountPercentage),
+						},
+				  ]
+				: [],
+			metadata: {
+				userId: req.user._id.toString(),
+				couponCode: couponCode || "",
+				products: JSON.stringify(
+					products.map((p) => ({
+						id: p._id,
+						quantity: p.quantity,
+						price: p.price,
+					}))
+				),
+			},
+		});
 
     if(totalAmount  > 200){
         await createNewCoupon(req.user._id);
@@ -79,13 +87,13 @@ export const checkoutSuccess = async (req,res) => {
         //create a new order
         const products = JSON.parse(session.metadata.products);
         const newOrder = new Order({
-            user : session.metadata.userId,
+            userId : session.metadata.userId,
             products : products.map((product) => ({
                 productId : product.id,
                 quantity : product.quantity,
-                price : product.price
+                price : (product.price).toFixed(2) // ensure price is in dollars, 2 decimals
             })),
-            totalAmount : session.amount_total,
+            totalAmount : (session.amount_total / 100).toFixed(2), // convert cents to dollars, 2 decimals
             stripeSessionId : session.id,
         })
 

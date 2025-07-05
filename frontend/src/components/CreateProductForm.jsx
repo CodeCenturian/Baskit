@@ -28,6 +28,14 @@ const CreateProductForm = () => {
 
 	const handleImageChange = (e) => {
 		const file = e.target.files[0];
+
+		// Check file size (e.g., 5MB limit)
+		const MAX_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+		if (file && file.size > MAX_SIZE) {
+			alert("Image must be smaller than 5MB!");
+			return; // Reject the file
+		}
+
 		if (file) {
 			const reader = new FileReader();
 

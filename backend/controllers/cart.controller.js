@@ -14,7 +14,7 @@ export const getCartProducts = async (req,res) => {  // tricky
         res.json(cartItems);
     } catch (error) {
         console.log("Error in getCartProducts Controller: ", error);
-        res.status(500).json({message : error.message});
+        res.status(3500).json({message : error.message});
     }
 }
 export const addToCart = async (req,res) => {
@@ -41,7 +41,7 @@ export const addToCart = async (req,res) => {
 
 export const removeFromCart = async (req,res) => {
     try {
-        const {productId} = req.body;
+        const {productId} = req.params;
         console.log(req.body)
         const user = req.user;
 

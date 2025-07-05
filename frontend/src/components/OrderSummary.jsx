@@ -24,7 +24,7 @@ const OrderSummary = () => {
 			couponCode: coupon ? coupon.code : null,
 		});
 
-		const session = res.data;
+		const session = res.data; // this will return the session id, using whihc we get rredirected to checkout page
 		const result = await stripe.redirectToCheckout({
 			sessionId: session.id,
 		});

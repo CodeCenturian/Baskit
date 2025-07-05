@@ -1,11 +1,11 @@
 import cloudinary from "../lib/cloudinary.js";
 import Product from "../models/product.model.js";
-import redis from "ioredis";
+import {redis} from "../lib/redis.js";
 
 export const getAllProducts = async(req,res) =>{
     try {
-        const products = Product.find({});
-        res.status(200).json({products});
+        const products = await Product.find({}).lean();
+        res.status(200).json(products);
     } catch (error) {
         console.log("Error in getAllProducts Controller: ", error);
     }
