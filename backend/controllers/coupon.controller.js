@@ -6,7 +6,6 @@ export const getCoupon = async (req,res) => {
         res.json(coupon);
 
     } catch (error) {
-        console.log("Error in getCoupon Controller: ", error);
         res.status(500).json({message : error.message});
     }
 }
@@ -29,7 +28,6 @@ export const validateCoupon = async (req,res) => {
             discountPercentage : coupon.discountPercentage
         });
     } catch (error) {
-        console.log("Error in validateCoupon Controller: ", error);
         res.status(500).json({message : error.message});
     }
 }

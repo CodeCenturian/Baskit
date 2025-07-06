@@ -53,7 +53,6 @@ export const signup = async(req, res) => {
             }
         );
     } catch (error) {
-         console.log("Error in Signup Controller: ", error);
         res.status(500).json({message : error.message});
     }
 }
@@ -80,14 +79,12 @@ export const login = async(req, res) => {
             res.status(401).json({message : "Invalid Credentials"});
         }
     } catch (error) {
-        console.log("Error in Login Controller: ", error);
         res.status(500).json({message : error.message});
     }
 }
 
 export const logout = async(req, res) => {
     try {
-        console.log("Logout cont reached");
         const refreshToken = req.cookies.refreshToken;
         if(refreshToken){
             const decodedPayload = jwt.verify(refreshToken , process.env.REFRESH_TOKEN_SECRET);  // this returrns an object
@@ -96,7 +93,6 @@ export const logout = async(req, res) => {
 
         res.clearCookie("accessToken");
         res.clearCookie("refreshToken");
-        console.log("Logout cont executed");
 
         res.status(200).json({message : "Logout is successful"});
     } catch (error) {

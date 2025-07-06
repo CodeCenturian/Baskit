@@ -10,7 +10,7 @@ export const protectRoute = async(req,res,next) =>{
      try {
          const decodedPayload  =jwt.verify(accessToken , process.env.ACCESS_TOKEN_SECRET);
          const user = await User.findById(decodedPayload.userID);
-         console.log(user);
+         // console.log(user);
 
          if(!user) return res.status(401).json({message : "Unauthorized - User not found"});
 
@@ -23,7 +23,7 @@ export const protectRoute = async(req,res,next) =>{
 
 
    } catch (error) {
-     console.log("Error in ProtectRoute Middleware: ", error);
+     // console.log("Error in ProtectRoute Middleware: ", error);
      res.status(500).json({message : error.message});
 
    }

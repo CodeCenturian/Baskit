@@ -77,6 +77,7 @@ export const useCartStore = create((set, get) => ({
 		}
 
 		await axiosInstance.put(`/cart/${productId}`, { quantity });
+
 		set((prevState) => ({
 			cart: prevState.cart.map((item) => (item._id === productId ? { ...item, quantity } : item)),
 		}));

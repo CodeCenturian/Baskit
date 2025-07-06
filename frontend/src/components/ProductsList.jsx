@@ -5,8 +5,8 @@ import { useProductStore } from "../stores/useProductStore";
 const ProductsList = () => {
 	const { deleteProduct, toggleFeaturedProduct, products , loading } = useProductStore();
 
-	console.log("products", products);
-	
+	// console.log("products", products);
+
 	if (loading) {
     return <div className="text-center py-8 text-gray-400">Loading products...</div>;
   }

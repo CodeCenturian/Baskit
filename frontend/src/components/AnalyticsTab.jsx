@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import HashLoader from "react-spinners/HashLoader";
 import axios from "../lib/axios";
 import { Users, Package, ShoppingCart, DollarSign } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
@@ -31,7 +32,11 @@ const AnalyticsTab = () => {
 	}, []);
 
 	if (isLoading) {
-		return <div>Loading...</div>;
+		return (
+		<div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+		<HashLoader color="#36d7b7" size={80} />
+		</div>
+	);
 	}
 
 	return (

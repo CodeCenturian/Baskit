@@ -7,7 +7,7 @@ export const getAllProducts = async(req,res) =>{
         const products = await Product.find({}).lean();
         res.status(200).json(products);
     } catch (error) {
-        console.log("Error in getAllProducts Controller: ", error);
+        // console.log("Error in getAllProducts Controller: ", error);
     }
 }
 
@@ -24,7 +24,7 @@ export const getFeaturedProducts = async (req, res) => {
         res.json(featuredProducts);
 
     } catch (error) {
-        console.log("Error in getFeaturedProducts Controller: ", error);
+        // console.log("Error in getFeaturedProducts Controller: ", error);
         res.status(500).json({message : error.message});
     }
 }
@@ -47,7 +47,7 @@ export const createProduct = async (req,res) => {
         })
         res.status(201).json(product);
     } catch (error) {
-        console.log("Error in createProduct controller" , error.message);
+        // console.log("Error in createProduct controller" , error.message);
         res.status(500).json({message : "Server Error : ", error : error.message});
     }
 }
@@ -62,13 +62,13 @@ export const deleteProduct = async (req , res) => {
                 const publicId = product.image.split("/").pop().split(".")[0];
                 await cloudinary.uploader.destroy('/products/${publicId}');
             } catch (error) {
-                console.log("Error in deleteProduct controller" , error.message);
+                // console.log("Error in deleteProduct controller" , error.message);
             }
         }
         await Product.findByIdAndDelete(req.params.id);
         res.status(200).json({message : "Product deleted successfully"});
     } catch (error) {
-        console.log("Error in deleteProduct controller" , error.message);
+        // console.log("Error in deleteProduct controller" , error.message);
         res.status(500).json({message : "Server Error : ", error : error.message});
     }
 }

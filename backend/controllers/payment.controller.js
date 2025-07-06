@@ -106,7 +106,6 @@ export const checkoutSuccess = async (req,res) => {
         })
 
     } catch (error) {
-        console.log("Error in paymentSuccess Controller: ", error);
         res.status(500).json({message : error.message});
     }
 };
