@@ -7,7 +7,7 @@ const productRoutes = express.Router();
 productRoutes.get("/" , protectRoute , adminRoute , getAllProducts );
 productRoutes.get("/featured" , getFeaturedProducts)
 productRoutes.get("/recommendations" , getRecommendedProducts)
-productRoutes.get("/category/:category" , getProductsByCategory)
+productRoutes.get("/category/:category([a-zA-Z]+)" , getProductsByCategory)
 productRoutes.post("/",protectRoute , adminRoute , createProduct);
 productRoutes.delete("/:id",protectRoute , adminRoute , deleteProduct);
 productRoutes.patch("/:id",protectRoute , adminRoute , toggleFeaturedProduct);
